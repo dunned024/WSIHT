@@ -1,0 +1,5 @@
+# ignore libraries
+venv/
+
+# ignore PyCharm-related files & folders
+.idea/

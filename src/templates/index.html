@@ -1,0 +1,18 @@
+<html>
+    <script>
+        $SCRIPT_ROOT = {{ request.script_root|tojson }};
+    </script>
+    <script src="{{ url_for('static', filename='jquery-3.6.4.min.js') }}"></script>
+    <script src="http://maps.googleapis.com/maps/api/js?libraries=places"></script>
+{#    <script src="jquery.geocomplete.js"></script>#}
+    <head>
+        <title>Where Should I Hike Today?</title>
+        <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='style.css') }}">
+    </head>
+    <body>
+         <form action="/get_location" method="POST">
+             <input name="location_input">
+             <input type="submit" value="Enter location">
+         </form>
+    </body>
+</html>

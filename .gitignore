@@ -3,3 +3,6 @@ venv/
 
 # ignore PyCharm-related files & folders
 .idea/
+
+# ignore caches
+**/__pycache__

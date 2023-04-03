@@ -5,9 +5,11 @@
         <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='style.css') }}">
     </head>
     <body>
-         <form action="/hikes" method="POST">
-             <input name="location_input">
-             <input type="submit" value="Enter location">
-         </form>
+        % for trail in trails %
+            {{ trail.id }}
+            {{ trail.name }}
+            {{ trail.latitude }}
+            {{ trail.longitude }}
+        % endfor %
     </body>
 </html>

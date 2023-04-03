@@ -6,3 +6,4 @@ venv/
 
 # ignore caches
 **/__pycache__
+.pytest_cache

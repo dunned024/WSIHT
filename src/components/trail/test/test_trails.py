@@ -1,4 +1,4 @@
-from components.trail_collector.trails import Trail, parse_trail_hits
+from components.trail.trails import Trail, parse_trail_hits
 
 
 def test_parse_trail_hits():

@@ -2,7 +2,7 @@ from flask import Flask, request, render_template
 
 from components.geography.coordinates import get_coord_box
 from components.geography.location import get_location
-from components.trail_collector.trails import get_trails
+from components.trail.trails import get_trails
 
 
 APP_NAME = "WSIHT"

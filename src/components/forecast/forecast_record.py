@@ -1,11 +1,12 @@
-#!/usr/bin/env python3
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
+from forecast_data_gateway import db
 
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///Users.sqlite3'
-
-db = SQLAlchemy(app)
-class Users(db.Model):
-    id = db.Column("User_ID", db.integer, primary_key=True)
-    name = db.Column(db.String(20))
+class Forecast(db.Model):
+    latitude = db.Column(db.float)
+    longitude = db.Column(db.float)
+    temperature = db.Column(db.float)
+    humidity = db.Column(db.float)
+    cloud_coverage = db.Column(db.float)
+    visibility = db.Column(db.float)
+    wind = db.Column(db.float)
+    wind_gust = db.Column(db.float)
+    dew_point = db.Column(db.float)

@@ -4,6 +4,7 @@ import io
 import math
 import os
 from datetime import datetime
+from urllib import parse
 
 import xarray
 from flask import Flask
@@ -83,7 +84,8 @@ def _upload_chunk(chunk):
 if __name__ == "__main__":
     load_dotenv()
     app = Flask("forecast_collector")
-    app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL", "")
+    db_url = parse.urlsplit(os.getenv("DATABASE_URL", ""))
+    app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://" + db_url.netloc + db_url.path
 
     db.init_app(app)
     with app.app_context():

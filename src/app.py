@@ -1,27 +1,37 @@
-from flask import Flask, request, render_template
+from dotenv import load_dotenv
+from flask import Blueprint, Flask, render_template
 
-from components.geography.coordinates import get_coord_box
-from components.geography.location import get_location
-from components.trail.trails import get_trails
+from components.hike.hike_application import hikes
+from components.forecast.forecast_data_gateway import db
+from components.forecast.forecast_record import Forecast
 
 
 APP_NAME = "WSIHT"
-app = Flask(APP_NAME)
+
+index = Blueprint('index', APP_NAME, template_folder='src/templates')
 
 
-@app.route("/", methods=["GET"])
-def main():
-    return render_template("index.html")
+@index.route('/')
+def index_blueprint():
+    return render_template('index.html')
 
 
-@app.route("/hikes", methods=["POST"])
-def hikes():
-    input_text = request.form.get("location_input", "")
-    location = get_location(input_text)
-    if location is None:
-        return "Invalid location. Try entering a City or ZIP Code."
-    coord_box = get_coord_box(location)
-    trails = get_trails(coord_box)
-    return trails
-    # return render_template("trails.html", trails=trails)
-    # return "You entered: " + str(location)
+def create_app():
+    load_dotenv()
+
+    app = Flask(APP_NAME)
+    app.config.from_prefixed_env()
+
+    db.init_app(app)
+    with app.app_context():
+        db.create_all()
+
+    from components.forecast.forecast_collector import forecasts
+    app.register_blueprint(index)
+    app.register_blueprint(hikes)
+    app.register_blueprint(forecasts)
+    return app
+
+
+if __name__ == "__main__":
+    app = create_app()

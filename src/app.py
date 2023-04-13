@@ -7,7 +7,6 @@ from components.hike.hike_application import hikes
 from components.forecast.forecast_data_gateway import db
 from components.forecast.forecast_record import Forecast
 
-
 APP_NAME = "WSIHT"
 
 index = Blueprint('index', APP_NAME, template_folder='src/templates')

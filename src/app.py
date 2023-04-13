@@ -1,3 +1,5 @@
+import os
+
 from dotenv import load_dotenv
 from flask import Blueprint, Flask, render_template
 
@@ -17,21 +19,18 @@ def index_blueprint():
 
 
 def create_app():
-    load_dotenv()
-
     app = Flask(APP_NAME)
-    app.config.from_prefixed_env()
+    app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL", "")
 
     db.init_app(app)
     with app.app_context():
         db.create_all()
 
-    from components.forecast.forecast_collector import forecasts
     app.register_blueprint(index)
     app.register_blueprint(hikes)
-    app.register_blueprint(forecasts)
     return app
 
 
 if __name__ == "__main__":
+    load_dotenv()
     app = create_app()

@@ -2,6 +2,7 @@
 
 import io
 import math
+import os
 from datetime import datetime
 
 import xarray
@@ -82,7 +83,7 @@ def _upload_chunk(chunk):
 if __name__ == "__main__":
     load_dotenv()
     app = Flask("forecast_collector")
-    app.config.from_prefixed_env()
+    app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL", "")
 
     db.init_app(app)
     with app.app_context():

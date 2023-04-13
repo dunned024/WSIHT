@@ -1,4 +1,5 @@
 import os
+from threading import Lock
 from urllib import parse
 
 from dotenv import load_dotenv
@@ -24,7 +25,7 @@ def create_app():
     app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://" + db_url.netloc + db_url.path
 
     db.init_app(app)
-    with app.app_context():
+    with app.app_context(), Lock():
         db.create_all()
 
     app.register_blueprint(index)

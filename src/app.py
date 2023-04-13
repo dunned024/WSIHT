@@ -1,4 +1,5 @@
 import os
+from urllib import parse
 
 from dotenv import load_dotenv
 from flask import Blueprint, Flask, render_template
@@ -19,7 +20,8 @@ def index_blueprint():
 
 def create_app():
     app = Flask(APP_NAME)
-    app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL", "")
+    db_url = parse.urlsplit(os.getenv("DATABASE_URL", ""))
+    app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://" + db_url.netloc + db_url.path
 
     db.init_app(app)
     with app.app_context():

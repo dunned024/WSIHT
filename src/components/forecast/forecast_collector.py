@@ -33,7 +33,7 @@ def get_forecasts():
     today = datetime.today().strftime("%Y-%m-%d")
 
     print("erasing old data...")
-    _delete_old_rows(today)
+    _delete_old_rows()
 
     print(f"gathering data for {today}...")
     all_data = _get_herbie_data(today)
@@ -49,8 +49,9 @@ def get_forecasts():
     return "success"
 
 
-def _delete_old_rows(today: str):
-    Forecast.__table__.delete().where(Forecast.day != today)
+def _delete_old_rows():
+        Forecast.query.delete()
+        db.session.commit()
 
 
 def _get_herbie_data(today: str):
@@ -74,6 +75,9 @@ def _get_herbie_data(today: str):
 
     print("merging dataset...")
     all_data = xarray.merge([surface, two_meters, ten_meters, atmosphere], compat="override")
+
+    # Measure from prime meridian
+    all_data["longitude"] = all_data["longitude"] - 360
     return all_data.reset_coords(["latitude", "longitude", "time"])
 
 
@@ -103,6 +107,7 @@ if __name__ == "__main__":
 
     db.init_app(app)
     with app.app_context():
+        db.create_all()
         get_forecasts()
 
 

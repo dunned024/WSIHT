@@ -1,16 +1,8 @@
-from unittest.mock import MagicMock
-
-from geopy import Location
-
-from components.geography.coordinates import get_coord_box
+from components.geography.coordbox_collector import get_coord_box
 
 
 def test_get_coord_box():
-    mock_location = MagicMock(spec=Location)
-    mock_location.latitude = 1.0
-    mock_location.longitude = 2.0
-
-    coord_box = get_coord_box(mock_location)
+    coord_box = get_coord_box(latitude=1.0, longitude=2.0, padding=0.1)
 
     assert coord_box.north == 1.1
     assert coord_box.south == 0.9

@@ -1,21 +1,8 @@
 import requests
-from typing import Any, NamedTuple
+from typing import Any
 
-from components.geography.coordinates import CoordBox
-
-
-# CONTINENTAL_US_BOUNDING_BOX
-# LAT_NORTH = 49.384358
-# LAT_SOUTH = 24.396308
-# LON_WEST = -124.848974
-# LON_EAST = -66.885444
-
-
-class Trail(NamedTuple):
-    id: int
-    name: str
-    latitude: float
-    longitude: float
+from components.geography.coordbox_collector import CoordBox
+from components.trail.trail_record import Trail
 
 
 def get_trails(coord_box: CoordBox):
@@ -48,11 +35,10 @@ def get_trails(coord_box: CoordBox):
     }
 
     response = requests.post(url, json=payload, headers=headers)
-    return parse_trail_hits(response.json()["hits"])
+    return _parse_trail_hits(response.json()["hits"])
 
 
-
-def parse_trail_hits(hits: list[dict[str, Any]]) -> list[Trail]:
+def _parse_trail_hits(hits: list[dict[str, Any]]) -> list[Trail]:
     return [
         Trail(
             id=raw_trail["ID"],

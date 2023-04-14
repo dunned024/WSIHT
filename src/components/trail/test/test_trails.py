@@ -1,4 +1,5 @@
-from components.trail.trails import Trail, parse_trail_hits
+from components.trail.trail_collector import _parse_trail_hits
+from components.trail.trail_record import Trail
 
 
 def test_parse_trail_hits():
@@ -21,7 +22,7 @@ def test_parse_trail_hits():
         },
     ]
 
-    trails = parse_trail_hits(hits)
+    trails = _parse_trail_hits(hits)
 
     assert trails[0] == Trail(
         id=1,

@@ -1,6 +1,6 @@
 from pytest_mock import MockerFixture
 
-from components.geography.location import Nominatim, get_location
+from components.geography.coordbox_collector import Nominatim, get_location
 
 
 def test_get_location(mocker: MockerFixture):

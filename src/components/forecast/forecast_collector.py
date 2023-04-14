@@ -30,7 +30,29 @@ RENAME_MAP = {
 
 
 def get_forecasts():
-    H = Herbie(datetime.today().strftime("%Y-%m-%d"), model="hrrr", product="sfc", fxx=0)
+    today = datetime.today().strftime("%Y-%m-%d")
+
+    _delete_old_rows(today)
+
+    all_data = _get_herbie_data(today)
+
+    print("uploading chunks...")
+    CHUNK_SIZE = 50
+    total_chunks = math.ceil(len(all_data.x) / CHUNK_SIZE)
+    for i, chunk in enumerate(_chunk_by_x(all_data, CHUNK_SIZE)):
+        print(f"chunk: {i+1} / {total_chunks}")
+        _upload_chunk(chunk)
+
+    print("finished uploading data")
+    return "success"
+
+
+def _delete_old_rows(today: str):
+    Forecast.__table__.delete().where(Forecast.day != today)
+
+
+def _get_herbie_data(today: str):
+    H = Herbie(today, model="hrrr", product="sfc", fxx=0)
 
     # APCP : tp : accumulated/total precipitation (kg/m2)
     # GUST : gust : surface wind gust (m/s)
@@ -50,17 +72,7 @@ def get_forecasts():
 
     print("merging dataset...")
     all_data = xarray.merge([surface, two_meters, ten_meters, atmosphere], compat="override")
-    all_data = all_data.reset_coords(["latitude", "longitude", "time"])
-
-    print("uploading chunks...")
-    CHUNK_SIZE = 50
-    total_chunks = math.ceil(len(all_data.x) / CHUNK_SIZE)
-    for i, chunk in enumerate(_chunk_by_x(all_data, CHUNK_SIZE)):
-        print(f"chunk: {i+1} / {total_chunks}")
-        _upload_chunk(chunk)
-
-    print("finished uploading data")
-    return "success"
+    return all_data.reset_coords(["latitude", "longitude", "time"])
 
 
 def _chunk_by_x(all_data, chunk_size):

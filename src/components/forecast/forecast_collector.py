@@ -32,8 +32,10 @@ RENAME_MAP = {
 def get_forecasts():
     today = datetime.today().strftime("%Y-%m-%d")
 
+    print("erasing old data...")
     _delete_old_rows(today)
 
+    print(f"gathering data for {today}...")
     all_data = _get_herbie_data(today)
 
     print("uploading chunks...")

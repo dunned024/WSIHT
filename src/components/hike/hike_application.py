@@ -4,7 +4,7 @@ from components.geography.coordbox_collector import get_coord_box, get_location
 from components.hike.hike_analyzer import generate_hikes
 from components.trail.trail_collector import get_trails
 
-hikes = Blueprint('hikes_blueprint', __name__, template_folder='src/templates')
+hikes = Blueprint("hikes_blueprint", __name__, template_folder="src/templates")
 
 
 @hikes.route("/hikes", methods=["POST"])

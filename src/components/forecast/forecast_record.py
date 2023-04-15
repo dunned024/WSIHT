@@ -15,4 +15,4 @@ class Forecast(db.Model):
     dew_point = db.Column(db.Float, nullable=False)
 
     def __repr__(self):
-        return f'<Forecast "{self.latitude}, {self.longitude}">'
+        return f"<Forecast '{self.latitude}, {self.longitude}'>"
